@@ -1,0 +1,12 @@
+{
+    "https://api.shinyapps.io": {
+        "server_url": "https://api.shinyapps.io",
+        "filename": "/Users/ryanlacey/Documents/Personal/GitHubPersonal/Mechnical-Watch-Data-Shiny-App copy",
+        "app_url": "https://ryanlacey.shinyapps.io/mechanical-watch-stats/",
+        "app_id": 13120172,
+        "app_guid": null,
+        "title": "mechanical-watch-stats",
+        "app_mode": "python-shiny",
+        "app_store_version": 1
+    }
+}
