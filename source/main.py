@@ -6,10 +6,10 @@ from shiny import App, ui, render
 from shinywidgets import output_widget, render_widget
 import plotly.express as px
 
+root_dir = os.path.dirname(os.path.abspath(__file__)) 
 
 def load_data():
-    base_dir = os.path.dirname(os.path.abspath(__file__))  
-    excel_file = os.path.join(base_dir, "Data", get_latest_excel_file())
+    excel_file = os.path.join(root_dir, "Data", get_latest_excel_file())
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
     df = pd.read_excel(excel_file, sheet_name=excel_sheet_names[0])  
     return [excel_sheet_names[0], df]

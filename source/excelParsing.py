@@ -1,10 +1,11 @@
 import os
 
+curr_dir = os.path.dirname(os.path.abspath(__file__)) 
+
 def find_accuracy():
-    directory = './source/Data/'
     matching_files = []
 
-    for filename in os.listdir(directory):
+    for filename in os.listdir(curr_dir+"/Data"):
         if filename.startswith("Accuracy") and filename.endswith(".xlsx"):
             matching_files.append(filename)
 
