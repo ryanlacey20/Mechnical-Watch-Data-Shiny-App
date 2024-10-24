@@ -1,4 +1,4 @@
-
+# source/main.py
 from source.excelParsing import get_latest_excel_file  
 import pandas as pd
 import os
@@ -8,7 +8,8 @@ import plotly.express as px
 
 
 def load_data():
-    excel_file = "Data/" + get_latest_excel_file()
+    base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current file
+    excel_file = os.path.join(base_dir, "Data", get_latest_excel_file())
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
     df = pd.read_excel(excel_file, sheet_name=excel_sheet_names[0])  
     return df
