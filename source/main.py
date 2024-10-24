@@ -11,8 +11,13 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 def load_data():
     excel_file = os.path.join(root_dir, "Data", get_latest_excel_file())
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
-    df = pd.read_excel(excel_file, sheet_name=excel_sheet_names[0])  
-    return [excel_sheet_names[0], df]
+    to_return = []
+    for sheet in excel_sheet_names:
+        if sheet != "Statistics":
+            df = pd.read_excel(excel_file, sheet_name=sheet)  
+            to_return.append([sheet, df])
+    
+    return to_return
 
 
 app_ui = ui.page_fluid(
@@ -23,20 +28,22 @@ app_ui = ui.page_fluid(
 
 def server(input, output, session):
     df_data = load_data()
-    df_plot = df_data[1]
-    df_name = df_data[0]
-
-    @output
-    @render_widget
-    def plot():
-        scatterplot = px.scatter(
-            df_plot,
-            x='Day No',
-            y='Daily Deviation',
-            title=f"Day No vs Daily Deviation: {df_name}"
-        )
-        return scatterplot
     
+    for sheet in df_data:
+        df_name = sheet[0]
+        print("sheet:", df_name)
+        df_plot = sheet[1]
+        @output
+        @render_widget
+        def plot():
+            scatterplot = px.scatter(
+                df_plot,
+                x='Day No',
+                y='Daily Deviation',
+                title=f"Day No vs Daily Deviation: {df_name}"
+            )
+            return scatterplot
+        
     @output
     @render.text
     def debug_info():
