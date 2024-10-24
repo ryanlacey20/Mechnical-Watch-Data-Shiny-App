@@ -8,23 +8,23 @@ import plotly.express as px
 
 
 def load_data():
-    base_dir = os.path.dirname(os.path.abspath(__file__))  # Get the directory of the current file
-    print(os.getcwd())
+    base_dir = os.path.dirname(os.path.abspath(__file__))  
     excel_file = os.path.join(base_dir, "Data", get_latest_excel_file())
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
     df = pd.read_excel(excel_file, sheet_name=excel_sheet_names[0])  
-    return df
+    return [excel_sheet_names[0], df]
 
 
 app_ui = ui.page_fluid(
-    ui.input_slider("n", "Number of bins", 1, 100, 20),
     output_widget("plot"),
     ui.output_text("debug_info")  
 )
 
 
 def server(input, output, session):
-    df_plot = load_data()
+    df_data = load_data()
+    df_plot = df_data[1]
+    df_name = df_data[0]
 
     @output
     @render_widget
@@ -33,7 +33,7 @@ def server(input, output, session):
             df_plot,
             x='Day No',
             y='Daily Deviation',
-            title="Day No vs Daily Deviation"
+            title=f"Day No vs Daily Deviation: {df_name}"
         )
         return scatterplot
     
