@@ -1,6 +1,5 @@
 # app.py
-from source.main import app  # Import the Shiny app instance from the main module
+from source.main import app  
 
-# Run the Shiny app
 if __name__ == "__main__":
-    app.run()  # This will start the app when you run app.py directly
+    app.run(host='0.0.0.0', port=8000)  
