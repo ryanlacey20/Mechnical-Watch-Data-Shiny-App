@@ -18,6 +18,7 @@ def load_data():
 app_ui = ui.page_fluid(
     ui.input_slider("n", "Number of bins", 1, 100, 20),
     output_widget("plot"),
+    ui.output_text("debug_info")  
 )
 
 
@@ -34,6 +35,11 @@ def server(input, output, session):
             title="Day No vs Daily Deviation"
         )
         return scatterplot
+    
+    @output
+    @render.text
+    def debug_info():
+        return "test test"
 
 
 app = App(app_ui, server)
