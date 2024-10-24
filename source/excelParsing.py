@@ -1,7 +1,7 @@
 import os
 
 def find_accuracy():
-    directory = './Data/'
+    directory = './source/Data/'
     matching_files = []
 
     for filename in os.listdir(directory):
