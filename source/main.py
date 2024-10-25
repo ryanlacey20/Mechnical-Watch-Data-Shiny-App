@@ -16,6 +16,7 @@ def load_data():
         if sheet != "Statistics":
             df = pd.read_excel(excel_file, sheet_name=sheet)  
             to_return.append([sheet, df])
+            df.to_csv(root_dir+"/Data/"+"CSVs/"+sheet+".csv")
     
     return to_return
 
