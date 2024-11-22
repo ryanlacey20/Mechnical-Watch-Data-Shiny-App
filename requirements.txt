@@ -1,5 +1,4 @@
-shiny
 pandas
 plotly
-shinywidgets
-openpyxl
+flask
+flask_cors
