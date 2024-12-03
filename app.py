@@ -1,9 +1,8 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pandas as pd
 import os
-from src.excelParsing import get_latest_excel_file, get_latest_excel_file
-import json
+from src.excelParsing import get_latest_excel_file
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -12,10 +11,11 @@ app = Flask(__name__)
 CORS(app)
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
+# Path to the Excel file
+excel_file = os.path.join(root_dir, "src/Data", get_latest_excel_file())
 
 def load_data():
-    # Path to the Excel file
-    excel_file = os.path.join(root_dir, "src/Data", get_latest_excel_file())
+
     
     # Get sheet names from Excel
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
@@ -32,7 +32,6 @@ def load_data():
                     df[column] = df[column].fillna('')  # Replace NaT with empty string or None if preferred
             
             # Convert DataFrame to JSON and store it in dictionary
-            # This will be the JSON response
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
             # Optionally save to CSV
@@ -40,12 +39,62 @@ def load_data():
     
     return watchSheetandNames2D
 
+@app.route('/stat_data/get_daily_deviation', methods=['POST'])
+def load_daily_deviation_against_day():
+    try:
+        # Get the table name from the request
+        forTable = request.json.get("forTable")
+        if not forTable:
+            return jsonify({"error": "Table name not provided"}), 400
+        
+        # Read the Excel file for the specified table/sheet
+        dfAllCols = pd.read_excel(excel_file, sheet_name=forTable)
+        
+        # Columns to keep
+        colsToKeep = ['Day No', 'Daily Deviation']
+        
+        # Ensure the required columns exist in the DataFrame
+        missing_cols = [col for col in colsToKeep if col not in dfAllCols.columns]
+        if missing_cols:
+            return jsonify({"error": f"Missing columns in sheet '{forTable}': {missing_cols}"}), 400
+        
+        # Keep only relevant columns and drop rows with NaN values
+        dfRelevantCols = dfAllCols[colsToKeep].dropna(subset=colsToKeep)
+        
+        # Convert DataFrame to JSON and send it as a response
+        return jsonify(dfRelevantCols.to_dict(orient='records')), 200
+    
+    except Exception as e:
+        # Handle unexpected errors gracefully
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+@app.route('/get_table_data', methods=['POST'])
+def get_user_info():
+    data = load_data()  # Load the data dictionary
+
+    # Get the requested title from the request JSON body
+    requested_title = request.json.get("requestedTitle")
+
+    # Check if the requestedTitle exists in the dictionary keys
+    if requested_title in data:
+        return jsonify({"requestedTitle": requested_title, "data": data[requested_title]}), 200
+    else:
+        return jsonify({"error": "Requested title not found", "requestedTitle": requested_title}), 404
 
 @app.route('/api/data', methods=['GET'])
 def get_data():
     # Load data and return as JSON
     data = load_data()
     return jsonify(data)
+
+@app.route('/api/getTableTitles', methods=['GET'])
+def get_table_title():
+    # Load data to get sheet names
+    data = load_data()
+    return jsonify(list(data.keys()))  # Return only the sheet names as a list
 
 if __name__ == '__main__':
     # Run the app, accessible only on localhost
