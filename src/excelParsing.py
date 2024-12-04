@@ -41,7 +41,7 @@ def find_excel_files():
     return matching_files if matching_files else None
 
 def get_latest_excel_file():
-    clear_directory(csv_dir)
+    # clear_directory(csv_dir)
 
     data_file_names = find_excel_files()
     if data_file_names:
