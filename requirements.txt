@@ -1,5 +1,7 @@
-shiny
+gunicorn
 pandas
 plotly
-shinywidgets
+flask
+flask_cors
 openpyxl
+python-dotenv
