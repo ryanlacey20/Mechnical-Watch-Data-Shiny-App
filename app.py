@@ -3,6 +3,7 @@ from flask_cors import CORS
 import pandas as pd
 import os
 from src.excelParsing import get_latest_excel_file
+from dotenv import load_dotenv
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -10,12 +11,27 @@ app = Flask(__name__)
 # Enable CORS (Cross-Origin Resource Sharing)
 CORS(app)
 
-root_dir = os.path.dirname(os.path.abspath(__file__))
+# Load environment variables from .env file (only in development)
+if os.getenv('RUN_ENV') != 'prod':
+    load_dotenv()  # Only load .env if it's not production
+
+# Fetch the value of 'RUN_ENV' from the environment
+run_env = os.getenv('RUN_ENV')
+
+# Set root_dir based on the environment
+if run_env == "dev":
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    print("Running in development mode")
+else:
+    root_dir = "/app"  # Heroku sets the app's root directory to "/app"
+
+
+
 # Path to the Excel file
 excel_file = os.path.join(root_dir, "src/Data", get_latest_excel_file())
 
 # Path to the /tmp/CSVs directory
-tmp_dir = '/tmp/CSVs'
+tmp_dir = os.path.join(root_dir, "tmp")
 
 # Check if the directory exists, and create it if it doesn't
 if not os.path.exists(tmp_dir):
@@ -40,7 +56,7 @@ def load_data():
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
             # Save to CSV in the /tmp/CSVs directory
-            df.to_csv(os.path.join(tmp_dir, f"{sheet}.csv"))
+            df.to_csv(os.path.join(tmp_dir, "/CSVs", f"{sheet}.csv"))
     
     return watchSheetandNames2D
 
