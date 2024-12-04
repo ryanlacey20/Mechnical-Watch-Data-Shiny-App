@@ -43,7 +43,7 @@ def load_data():
     
     watchSheetandNames2D = {}
     for sheet in excel_sheet_names:
-        if sheet != "Statistics":  # Exclude 'Statistics' sheet if needed
+        if sheet != "Statistics" or sheet != "1929 Omega PW (Peggie)":  # Exclude 'Statistics' sheet if needed
             df = pd.read_excel(excel_file, sheet_name=sheet)
             
             # Handle datetime columns by converting NaT values to empty strings or another placeholder
@@ -56,7 +56,6 @@ def load_data():
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
             # Save to CSV in the /tmp/CSVs directory
-            print("LOOOK HERE DEBUG", os.path.join(tmp_dir, "CSVs", f"{sheet}.csv"))
             df.to_csv(os.path.join(tmp_dir, "CSVs", f"{sheet}.csv"))
     
     return watchSheetandNames2D
