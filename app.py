@@ -22,8 +22,6 @@ if not os.path.exists(tmp_dir):
     os.makedirs(tmp_dir)
 
 def load_data():
-
-    
     # Get sheet names from Excel
     excel_sheet_names = pd.ExcelFile(excel_file).sheet_names
     
@@ -41,10 +39,11 @@ def load_data():
             # Convert DataFrame to JSON and store it in dictionary
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
-            # Optionally save to CSV
-            df.to_csv("/tmp/", "CSVs/", f"{sheet}.csv")
+            # Save to CSV in the /tmp/CSVs directory
+            df.to_csv(os.path.join(tmp_dir, f"{sheet}.csv"))
     
     return watchSheetandNames2D
+
 
 @app.route('/stat_data/get_daily_deviation', methods=['POST'])
 def load_daily_deviation_against_day():
