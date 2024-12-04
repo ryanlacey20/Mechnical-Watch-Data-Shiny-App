@@ -4,4 +4,4 @@ plotly
 flask
 flask_cors
 openpyxl
-dotenv
+python-dotenv
