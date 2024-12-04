@@ -1,11 +1,14 @@
+import csv
 import os
 import shutil
 
 
 curr_dir = os.path.dirname(os.path.abspath(__file__)) 
-data_dir =curr_dir+"/Data"
-csv_dir = data_dir+"/CSVs"
+data_dir =curr_dir+"/Data" 
+csv_dir = "/tmp/CSVs"
 
+if not os.path.exists(csv_dir):
+    os.makedirs(csv_dir)
 
 def clear_directory(dir_to_clear):
     shutil.rmtree(dir_to_clear)

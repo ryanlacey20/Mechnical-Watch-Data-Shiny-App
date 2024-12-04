@@ -35,7 +35,7 @@ def load_data():
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
             # Optionally save to CSV
-            df.to_csv(os.path.join(root_dir, "src/Data", "CSVs", f"{sheet}.csv"))
+            df.to_csv(os.path.join(root_dir, "tmp", "CSVs", f"{sheet}.csv"))
     
     return watchSheetandNames2D
 
