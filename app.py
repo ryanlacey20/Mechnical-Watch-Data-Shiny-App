@@ -97,5 +97,5 @@ def get_table_title():
     return jsonify(list(data.keys()))  # Return only the sheet names as a list
 
 if __name__ == '__main__':
-    # Run the app, accessible only on localhost
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(debug=True)  # Debug can be True for local testing
+
