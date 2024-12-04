@@ -26,16 +26,12 @@ else:
     root_dir = "/app"  # Heroku sets the app's root directory to "/app"
 
 
-
 # Path to the Excel file
 excel_file = os.path.join(root_dir, "src/Data", get_latest_excel_file())
 
 # Path to the /tmp/CSVs directory
 tmp_dir = os.path.join(root_dir, "tmp")
 
-# Check if the directory exists, and create it if it doesn't
-if not os.path.exists(tmp_dir):
-    os.makedirs(tmp_dir)
 
 def load_data():
     # Get sheet names from Excel
@@ -56,7 +52,8 @@ def load_data():
             watchSheetandNames2D[sheet] = df.to_dict(orient='records')
             
             # Save to CSV in the /tmp/CSVs directory
-            df.to_csv(os.path.join(tmp_dir, "/CSVs", f"{sheet}.csv"))
+            print("LOOOK HERE DEBUG", os.path.join(tmp_dir, "CSVs", f"{sheet}.csv"))
+            df.to_csv(os.path.join(tmp_dir, "CSVs", f"{sheet}.csv"))
     
     return watchSheetandNames2D
 
