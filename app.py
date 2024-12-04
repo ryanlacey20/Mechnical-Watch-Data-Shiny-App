@@ -14,6 +14,13 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 # Path to the Excel file
 excel_file = os.path.join(root_dir, "src/Data", get_latest_excel_file())
 
+# Path to the /tmp/CSVs directory
+tmp_dir = '/tmp/CSVs'
+
+# Check if the directory exists, and create it if it doesn't
+if not os.path.exists(tmp_dir):
+    os.makedirs(tmp_dir)
+
 def load_data():
 
     
